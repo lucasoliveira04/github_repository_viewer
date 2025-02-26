@@ -4,20 +4,6 @@ import sys
 def install_package(package):
     subprocess.check_call([sys.executable, "-m", "pip", "install", package])
 
-def check_dependencies():
-    required_packages = ["requests", "Pillow"]
-    missing_packages = []
-    for package in required_packages:
-        try:
-            __import__(package)
-        except ImportError:
-            install_package(package)
-            missing_packages.append(package)
-    return missing_packages
-
-if __name__ == "__main__":
-    check_dependencies()
-
 from tkinter import Listbox, Tk, Label, Entry, font as tkFont, messagebox, simpledialog
 import requests
 import webbrowser
@@ -25,6 +11,8 @@ from tkinter import ttk
 import os
 import sqlite3
 from PIL import Image, ImageTk
+
+image_path = "github.png"
 
 def createTable():
     conn = sqlite3.connect('user_data.db')
@@ -246,7 +234,7 @@ def filterRepositories(event):
             error_label.config(text="")           
 
 def open_github(event):
-    webbrowser.open("https://github.com/lucascampos04")   
+    webbrowser.open("https://github.com/lucasoliveira04")   
 
 def restore_default_text_username(event):
     if not entry.get():
@@ -272,14 +260,20 @@ def main():
     window.configure(bg="#000000")
 
     # Imagem
-    image = Image.open("github.png")  
-    width, height = 40, 40
-    resized_image = image.resize((width, height))  
+    
 
-    tk_image = ImageTk.PhotoImage(resized_image)
+    if os.path.exists(image_path):
+        image = Image.open(image_path)
+        
+        width, height = 40, 40
+        resized_image = image.resize((width, height))  
 
-    image_label = Label(window, image=tk_image, bg="#000000")
-    image_label.place(x=755, y=1)
+        tk_image = ImageTk.PhotoImage(resized_image)
+
+        image_label = Label(window, image=tk_image, bg="#000000")
+        image_label.place(x=755, y=1)
+    else:
+        tk_image = None
 
     # Título e entrada de usuário
     config_title_label = ConfigurationLabel(window, "Repositories", font="Fixedsys") 
